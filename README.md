@@ -1,6 +1,6 @@
 # React-based Coin Game
 
-This is repo for Coin Game written in React.
+This is repo for Coin Game writen in React.
 
 ## Available commands
 
