@@ -4,7 +4,7 @@ This is repo for Coin Game written in React.
 
 ## Available commands
 
-Native NPM capabilities for this project are listed below:
+## NPM capabilities for this project are listed below:
 
 ### `npm i`
 
@@ -18,7 +18,7 @@ Run dev-version of a project. To see it, visit http://localhost:3000/ in browser
 
 Compile project as chunks and index.html into build/ folder via webpack utilities.
 
-Firebase CLI commands are listed below:
+## Firebase CLI commands are listed below:
 
 ### `firebase init`
 
