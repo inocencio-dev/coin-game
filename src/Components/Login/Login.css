@@ -1,0 +1,26 @@
+@keyframes logoanimation{
+    0% { transform: translate(1vw, 1vh) rotate(1deg); }
+    10% { transform: translate(-1vw, -2vh) rotate(-4deg); }
+    20% { transform: translate(-3vw, 0vh) rotate(2deg); }
+    30% { transform: translate(3vw, 2vh) rotate(0deg); }
+    40% { transform: translate(1vw, -1vh) rotate(1deg); }
+    50% { transform: translate(-1vw, 2vh) rotate(-2deg); }
+    60% { transform: translate(-3vw, 1vh) rotate(0deg); }
+    70% { transform: translate(3vw, 1vh) rotate(-4deg); }
+    80% { transform: translate(-1vw, -1vh) rotate(8deg); }
+    90% { transform: translate(1vw, 2vh) rotate(3deg); }
+    100% { transform: translate(1vw, -2vh) rotate(-2deg); }
+}
+
+.field{
+    margin: 8vh auto 0 auto;
+}
+
+.login{
+    display: flex;
+    flex-direction: column;
+    width: 100vw;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+}

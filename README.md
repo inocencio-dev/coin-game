@@ -31,3 +31,7 @@ Log into Firebase system via browser.
 ### `firebase deploy`
 
 Deploy application's build on Firebase from build/ folder.
+
+## The Game Could Be Seen At:
+
+https://coin-game-87583.web.app/
