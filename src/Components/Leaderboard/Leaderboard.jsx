@@ -12,43 +12,51 @@ import {
     DialogTitle,
     Table,
     TableBody,
-    TableCell,
+    TableCell, TableContainer,
     TableHead,
     TableRow
-} from "@mui/material";
+} from '@mui/material';
 
 const players = [
     {
         name: 'Nikita Mikhalkoff',
-        highscore: 9999
+        highscore: 9999,
+        'max streak': 8
     },
     {
         name: 'Linus Torvalds',
-        highscore: 'core dump'
+        highscore: 'core dump',
+        'max streak': 'fuck nvidia'
     },
     {
         name: 'Dmitry Porubov',
-        highscore: 4000
+        highscore: 4000,
+        'max streak': '12'
     },
     {
         name: 'Richard Stallman',
-        highscore: 187261
+        highscore: 187261,
+        'max streak': 192
     },
     {
         name: 'Jacques Fresco',
-        highscore: 88711
+        highscore: 88711,
+        'max streak': 992
     },
     {
         name: 'Stephen Hawking',
-        highscore: 0
+        highscore: 0,
+        'max streak': 0
     },
     {
         name: 'Bob Ross',
-        highscore: 999919
+        highscore: 999919,
+        'max streak': 222222
     },
     {
         name: 'Gennady',
-        highscore: -9999999
+        highscore: -9999999,
+        'max streak': '-1'
     }
 ];
 
@@ -79,7 +87,7 @@ const BootstrapDialogTitle = (props) => {
             {children}
             {onClose ? (
                 <IconButton
-                    aria-label="close"
+                    aria-label='close'
                     onClick={onClose}
                     sx={{
                         position: 'absolute',
@@ -112,52 +120,54 @@ function Leaderboard() {
 
     return (
         <div>
-            <Button sx={{...buttonSX}} variant="outlined" onClick={handleClickOpen}>
+            <Button sx={{...buttonSX}} variant='outlined' onClick={handleClickOpen}>
                 <Typography variant='h4' component='div' sx={{ flexGrow: 1 }}>
                     Leaderboard
                 </Typography>
             </Button>
             <BootstrapDialog
                 onClose={handleClose}
-                aria-labelledby="customized-dialog-title"
+                aria-labelledby='customized-dialog-title'
                 open={open}
             >
-                <BootstrapDialogTitle id="customized-dialog-title" onClose={handleClose}>
+                <BootstrapDialogTitle id='customized-dialog-title' onClose={handleClose}>
                     <Typography color={'primary'} sx={{fontSize: '6vh', margin: '1vw'}}>Leaderboard</Typography>
                 </BootstrapDialogTitle>
                 <DialogContent sx={{background: '#080808'}}>
-                    <Table>
-                        <TableHead>
-                            <TableRow sx={{background: '#161616'}}>
-                                {Object.keys(JSON.parse(localStorage.getItem('leaderboard'))[0]).map(col => {
+                    <TableContainer>
+                        <Table>
+                            <TableHead>
+                                <TableRow sx={{background: '#161616'}}>
+                                    {Object.keys(JSON.parse(localStorage.getItem('leaderboard'))[0]).map(col => {
+                                        return(
+                                            <TableCell key={col} sx={{borderBottom: 'none'}}>
+                                                <Typography color={'primary'} sx={{fontSize: '4vh'}}>
+                                                    {col}
+                                                </Typography>
+                                            </TableCell>
+                                        );
+                                    })}
+                                </TableRow>
+                            </TableHead>
+                            <TableBody>
+                                {players.map(player => {
                                     return(
-                                        <TableCell sx={{borderBottom: 'none'}}>
-                                            <Typography color={'primary'} sx={{fontSize: '4vh'}}>
-                                                {col}
-                                            </Typography>
-                                        </TableCell>
+                                        <TableRow key={player.name} sx={{background: '#161616', border: 'none'}}>
+                                            {Object.keys(JSON.parse(localStorage.getItem('leaderboard'))[0]).map(field => {
+                                                return(
+                                                    <TableCell sx={{borderBottom: 'none'}}>
+                                                        <Typography color={'primary'} sx={{fontSize: '3vh'}}>
+                                                            {player[field]}
+                                                        </Typography>
+                                                    </TableCell>
+                                                );
+                                            })}
+                                        </TableRow>
                                     );
                                 })}
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {players.map(player => {
-                                return(
-                                    <TableRow key={player.name} sx={{background: '#161616', border: 'none'}}>
-                                        {Object.keys(JSON.parse(localStorage.getItem('leaderboard'))[0]).map(field => {
-                                            return(
-                                                <TableCell sx={{borderBottom: 'none'}}>
-                                                    <Typography color={'primary'} sx={{fontSize: '3vh'}}>
-                                                        {player[field]}
-                                                    </Typography>
-                                                </TableCell>
-                                            );
-                                        })}
-                                    </TableRow>
-                                );
-                            })}
-                        </TableBody>
-                    </Table>
+                            </TableBody>
+                        </Table>
+                    </TableContainer>
                 </DialogContent>
             </BootstrapDialog>
         </div>

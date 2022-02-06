@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {Button, Input, Typography} from "@mui/material";
+import {Accordion, Button, Input, Typography} from "@mui/material";
 import './Game.css';
 
 function Game(props) {
@@ -46,6 +46,7 @@ function Game(props) {
     const [bet, setBet] = useState('');
     const [coeff, setCoeff] = useState(undefined);
     const [side, setSide] = useState(undefined); // heads or tails
+    const [poverty, setPoverty] = useState(0);
 
     function coeffCalc() {
         if (!bet) {
@@ -61,14 +62,19 @@ function Game(props) {
     // but there are ways to solve problems - using useEffect hook.
 
     useEffect(() => {
+        coeffCalc();
         if (/\d/.test(bet[bet.length - 1]) || !bet) {
             setMinMax(0, Number(props.coins));
-            coeffCalc();
         }
     }, [bet]);
 
+    useEffect(() => {
+        if(props.coins <= 0){
+            setPoverty(1);
+        }
+    },[props.coins]);
+
     function setMinMax(min, max) {
-        console.log('c now: ', coeff);
         if (bet < min) {
             setBet(max);
         }
@@ -81,37 +87,71 @@ function Game(props) {
         return Math.round(Math.random()); // tail(0) or head(1)
     }
 
-    function countCash() {
-        if (coinFlip() === 1) { // win
-            return (Number(coeff) * bet + Number(props.coins)).toFixed(2);
-        } else { // loss
-            return (Number(props.coins) - bet).toFixed(2);
+    function appendLog(prev, curr){
+        const diff = (1 - (Number(prev)/Number(curr))).toFixed(4);
+        const dyna = prev < curr ? 'rise' : 'fall';
+        const intel = {
+            '#': props.log[props.log.length - 1]['#'] + 1, // funny
+            balance: curr.toFixed(2),
+            side: side ? 'heads' : 'tails',
+            difference: (diff * 100).toFixed(2) + '%',
+            dynamics: dyna
         }
+        let res = props.log;
+        res.push(intel)
+        props.setLog(res);
     }
 
-    function handleBet(e){
+    function countCash() {
+        let res = null
+        const flip = coinFlip();
+        const prevCoins = props.coins;
+        if (flip === side) { // win
+            props.setStreak(props.streak + 1);
+            res = (Number(coeff) * bet + Number(props.coins));
+
+        } else { // loss
+            props.setStreak(0);
+            res = (Number(props.coins) - bet);
+        }
+        props.setCoins(res.toFixed(2));
+        appendLog(prevCoins, res, flip);
+    }
+
+    function handleBet(e) {
         setBet(e.target.value);
     }
 
     return (
         <div>
             <Input sx={{...fieldsSX}} placeholder={'bet'} value={bet} type={'number'}
-                   onChange={(e) => {handleBet(e)}}/>
+                   onChange={(e) => {
+                       handleBet(e)
+                   }}/>
             <Typography sx={{...labelsSX}}>
                 coefficient: {coeff ? coeff : 0}
             </Typography>
             <div>
-                <Button sx={{...smallerbuttonSX}} onClick={() => {
-                    if (!side) setSide(1);
+                <Button disabled={poverty} sx={{...smallerbuttonSX}} onClick={() => {
+                    setSide(1);
                 }}>Heads</Button>
-                <Button sx={{...smallerbuttonSX}} onClick={() => {
-                    if (side) setSide(0);
+                <Button disabled={poverty} sx={{...smallerbuttonSX}} onClick={() => {
+                    setSide(0);
                 }}>Tails</Button>
             </div>
-            <Button disabled={(bet === '' || side === undefined || coeff === undefined)}
-                    onClick={() => {props.setCoins(countCash)}} sx={{...buttonSX}} color={'primary'}>
+            <Button disabled={(poverty || bet === '' || side === undefined || !coeff)}
+                    onClick={countCash} sx={{...buttonSX}} color={'primary'}>
                 ./makebet on "{side ? 'Heads' : 'Tails'}"
             </Button>
+            <div>
+                <Button onClick={() => {
+                    props.setCoins(props.log[0]['coins'].toFixed(2));
+                    props.setLog([props.log[0]]);
+                    setPoverty(0);
+                }} sx={{...buttonSX}} color={'primary'}>
+                    ./restart
+                </Button>
+            </div>
         </div>
     );
 }
